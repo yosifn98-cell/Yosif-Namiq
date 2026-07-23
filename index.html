@@ -1,0 +1,1196 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yosif Namiq — Composer &amp; Pianist</title>
+<meta name="description" content="Yosif Namiq — composer and pianist crafting cinematic and orchestral music.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,900;1,500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#050505;
+  --black-2:#0a0a0b;
+  --black-3:#101012;
+  --gold:#D4AF37;
+  --gold-light:#F0DFA0;
+  --gold-pale:#F6ECC9;
+  --gold-deep:#8B6F2E;
+  --white:#F5F3EE;
+  --muted:#9A9488;
+  --glass-bg:rgba(255,255,255,0.035);
+  --glass-bg-2:rgba(255,255,255,0.05);
+  --glass-border:rgba(212,175,55,0.22);
+  --font-display:'Playfair Display', serif;
+  --font-script:'Cormorant Garamond', serif;
+  --font-body:'Jost', sans-serif;
+  --ease:cubic-bezier(.22,.9,.28,1);
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--black);
+  color:var(--white);
+  font-family:var(--font-body);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--gold); color:#050505;}
+img{max-width:100%;display:block;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;}
+
+/* scrollbar */
+::-webkit-scrollbar{width:9px;}
+::-webkit-scrollbar-track{background:var(--black);}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--gold-deep),var(--gold));border-radius:6px;}
+
+:focus-visible{outline:1.5px solid var(--gold); outline-offset:3px;}
+
+/* ---------- Preloader ---------- */
+#preloader{
+  position:fixed; inset:0; z-index:9999;
+  background:var(--black);
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column;
+}
+.pre-mono{
+  font-family:var(--font-display);
+  font-size:clamp(28px,5vw,44px);
+  letter-spacing:0.35em;
+  color:var(--gold-pale);
+  opacity:0;
+  padding-left:0.35em; /* optical centering for letter-spacing */
+}
+.pre-line{
+  margin-top:22px;
+  width:120px; height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  transform:scaleX(0);
+  transform-origin:center;
+}
+
+/* ---------- Nav ---------- */
+#site-nav{
+  position:fixed; top:0; left:0; right:0; z-index:500;
+  padding:26px 5vw;
+  display:flex; align-items:center; justify-content:space-between;
+  transition:background .5s var(--ease), padding .5s var(--ease), backdrop-filter .5s var(--ease), border-color .5s var(--ease);
+  border-bottom:1px solid transparent;
+}
+#site-nav.scrolled{
+  padding:16px 5vw;
+  background:rgba(5,5,5,0.72);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(212,175,55,0.12);
+}
+.nav-logo{
+  font-family:var(--font-display);
+  font-size:20px;
+  letter-spacing:0.18em;
+  color:var(--gold-pale);
+  border:1px solid rgba(212,175,55,0.35);
+  width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:50%;
+}
+.nav-links{display:flex; gap:44px;}
+.nav-links a{
+  font-size:12.5px; letter-spacing:0.16em; text-transform:uppercase;
+  color:var(--muted);
+  position:relative; padding-bottom:4px;
+  transition:color .35s var(--ease);
+}
+.nav-links a::after{
+  content:''; position:absolute; left:0; bottom:0; width:0; height:1px;
+  background:var(--gold); transition:width .4s var(--ease);
+}
+.nav-links a:hover, .nav-links a.active{color:var(--gold-pale);}
+.nav-links a:hover::after, .nav-links a.active::after{width:100%;}
+.nav-toggle{display:none; background:none; border:none; cursor:pointer; width:34px; height:22px; position:relative;}
+.nav-toggle span{position:absolute; left:0; right:0; height:1px; background:var(--gold-pale);}
+.nav-toggle span:nth-child(1){top:0;} .nav-toggle span:nth-child(2){top:10px;} .nav-toggle span:nth-child(3){top:20px;}
+
+@media(max-width:820px){
+  .nav-links{
+    position:fixed; inset:0 0 0 auto; width:min(78vw,320px);
+    background:rgba(6,6,7,0.98); backdrop-filter:blur(18px);
+    flex-direction:column; align-items:flex-start; justify-content:center;
+    gap:30px; padding:40px;
+    transform:translateX(100%); transition:transform .55s var(--ease);
+    border-left:1px solid rgba(212,175,55,0.18);
+  }
+  .nav-links.open{transform:translateX(0);}
+  .nav-toggle{display:block;}
+}
+
+/* ---------- Hero ---------- */
+.hero{
+  position:relative; height:100svh; min-height:560px; width:100%;
+  overflow:hidden; background:var(--black);
+}
+#piano-canvas{
+  position:absolute; inset:0; width:100%; height:100%; display:block;
+  touch-action:none; cursor:grab;
+}
+#piano-canvas:active{cursor:grabbing;}
+.hero-vignette{
+  position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(5,5,5,0) 35%, rgba(5,5,5,0.65) 82%, rgba(5,5,5,0.95) 100%),
+    linear-gradient(180deg, rgba(5,5,5,0.55) 0%, rgba(5,5,5,0) 22%, rgba(5,5,5,0) 68%, rgba(5,5,5,0.9) 100%);
+}
+.hero-content{
+  position:absolute; left:0; right:0; top:14%;
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+  pointer-events:none; z-index:2; padding:0 20px;
+}
+.eyebrow{
+  font-family:var(--font-script); font-style:italic; font-weight:500;
+  font-size:clamp(14px,1.6vw,19px); letter-spacing:0.08em;
+  color:var(--gold-light); margin:0 0 14px; opacity:0;
+}
+.hero-title{
+  font-family:var(--font-display); font-weight:600;
+  font-size:clamp(42px,9vw,110px);
+  letter-spacing:0.045em; line-height:0.98; margin:0;
+  color:var(--white);
+  text-shadow:0 0 40px rgba(212,175,55,0.18);
+  opacity:0;
+}
+.hero-title .amp{display:block; color:var(--gold); font-style:italic; font-weight:500; font-size:0.9em; margin-top:2px;}
+.hero-hint{
+  margin-top:26px; font-size:11px; letter-spacing:0.22em; text-transform:uppercase;
+  color:var(--muted); opacity:0;
+}
+.scroll-cue{
+  position:absolute; bottom:34px; left:50%; transform:translateX(-50%); z-index:2;
+  opacity:0;
+}
+.scroll-cue span{
+  display:block; width:1px; height:46px;
+  background:linear-gradient(var(--gold), transparent);
+  animation:scrollDown 2.2s ease-in-out infinite;
+}
+@keyframes scrollDown{
+  0%{transform:scaleY(0); transform-origin:top; opacity:0;}
+  40%{transform:scaleY(1); transform-origin:top; opacity:1;}
+  60%{transform:scaleY(1); transform-origin:bottom; opacity:1;}
+  100%{transform:scaleY(0); transform-origin:bottom; opacity:0;}
+}
+
+/* ---------- Sections generic ---------- */
+.section{
+  position:relative; padding:150px 0 130px;
+}
+.section-inner{width:min(1180px,88vw); margin:0 auto;}
+.section-label{
+  font-size:11.5px; letter-spacing:0.3em; text-transform:uppercase;
+  color:var(--gold); margin:0 0 18px; opacity:0.9;
+}
+.section-title{
+  font-family:var(--font-display); font-weight:500; font-size:clamp(30px,4.2vw,54px);
+  line-height:1.12; margin:0 0 34px; color:var(--white);
+}
+.section-title em{color:var(--gold-light); font-style:italic; font-weight:400;}
+
+/* divider */
+.gold-rule{width:64px; height:1px; background:linear-gradient(90deg,var(--gold),transparent); margin:0 0 30px;}
+
+/* ---------- About ---------- */
+.about .section-inner{display:grid; grid-template-columns:0.85fr 1.15fr; gap:70px; align-items:start;}
+.about-figure{
+  position:relative; aspect-ratio:3/4; border-radius:2px; overflow:hidden;
+  border:1px solid var(--glass-border);
+  background:
+    radial-gradient(circle at 30% 20%, rgba(212,175,55,0.25), transparent 55%),
+    linear-gradient(160deg,#161513,#040404 70%);
+}
+.about-figure canvas{width:100%;height:100%;display:block;}
+.about-figure::after{
+  content:''; position:absolute; inset:0;
+  box-shadow:inset 0 0 60px rgba(0,0,0,0.6);
+  pointer-events:none;
+}
+.about-text{font-size:16.5px; line-height:1.9; color:#cfcac0; font-weight:300; margin:0 0 22px;}
+.about-quote{
+  font-family:var(--font-script); font-style:italic; font-size:22px; color:var(--gold-pale);
+  border-left:1px solid var(--gold); padding-left:22px; margin:34px 0 0; line-height:1.5;
+}
+@media(max-width:860px){ .about .section-inner{grid-template-columns:1fr; gap:40px;} }
+
+/* ---------- Music ---------- */
+.music-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:28px;}
+.music-card{
+  position:relative; padding:22px; border-radius:4px;
+  background:var(--glass-bg); border:1px solid var(--glass-border);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  display:flex; gap:20px; align-items:center;
+  opacity:0; will-change:transform;
+  transform-style:preserve-3d;
+  transition:border-color .5s var(--ease), box-shadow .5s var(--ease), background .5s var(--ease);
+}
+.music-card:hover{
+  border-color:rgba(212,175,55,0.55);
+  box-shadow:0 20px 60px -20px rgba(212,175,55,0.28), 0 0 0 1px rgba(212,175,55,0.08) inset;
+  background:var(--glass-bg-2);
+}
+.cover-wrap{
+  position:relative; width:112px; height:112px; flex:none; border-radius:3px; overflow:hidden;
+  border:1px solid rgba(212,175,55,0.25);
+}
+.cover-wrap canvas{width:100%;height:100%;display:block;}
+.track-info{flex:1; min-width:0;}
+.track-title{font-family:var(--font-display); font-size:19px; font-weight:500; margin:0 0 6px; color:var(--white);}
+.track-sub{font-size:12px; letter-spacing:0.08em; color:var(--muted); margin:0 0 16px; text-transform:uppercase;}
+.play-row{display:flex; align-items:center; gap:14px;}
+.play-btn{
+  width:42px;height:42px;border-radius:50%; flex:none;
+  border:1px solid var(--gold); background:transparent; color:var(--gold-pale);
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  transition:background .35s var(--ease), color .35s var(--ease), transform .3s var(--ease), box-shadow .35s var(--ease);
+}
+.play-btn:hover{background:var(--gold); color:#0a0a0a; transform:scale(1.06); box-shadow:0 0 24px rgba(212,175,55,0.45);}
+.play-btn svg{width:14px;height:14px;}
+.play-btn .icon-pause{display:none;}
+.play-btn.playing .icon-play{display:none;}
+.play-btn.playing .icon-pause{display:block;}
+.eq{display:flex; align-items:flex-end; gap:3px; height:16px;}
+.eq span{width:2.5px; background:var(--gold); height:4px; border-radius:1px; opacity:0.5; transition:opacity .3s;}
+.music-card.active-eq .eq span{opacity:1; animation:eqBounce 0.9s ease-in-out infinite;}
+.music-card.active-eq .eq span:nth-child(1){animation-delay:0s;}
+.music-card.active-eq .eq span:nth-child(2){animation-delay:.15s;}
+.music-card.active-eq .eq span:nth-child(3){animation-delay:.3s;}
+.music-card.active-eq .eq span:nth-child(4){animation-delay:.1s;}
+@keyframes eqBounce{0%,100%{height:4px;}50%{height:15px;}}
+@media(max-width:700px){ .music-grid{grid-template-columns:1fr;} }
+
+/* ---------- Gallery ---------- */
+.gallery-grid{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:22px;
+}
+.gallery-item{
+  position:relative; aspect-ratio:4/5; overflow:hidden; border-radius:3px;
+  border:1px solid rgba(212,175,55,0.14);
+  opacity:0; perspective:900px;
+}
+.gallery-item canvas{width:100%; height:100%; display:block; transition:transform .6s var(--ease), filter .6s var(--ease);}
+.gallery-item .g-overlay{
+  position:absolute; inset:0; display:flex; align-items:flex-end; padding:20px;
+  background:linear-gradient(180deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.75) 100%);
+  opacity:0; transition:opacity .45s var(--ease);
+}
+.gallery-item:hover .g-overlay{opacity:1;}
+.gallery-item:hover canvas{filter:brightness(1.08);}
+.g-cap{font-family:var(--font-script); font-style:italic; font-size:18px; color:var(--gold-pale);}
+.gallery-item.tall{grid-row:span 2; aspect-ratio:auto;}
+@media(max-width:900px){ .gallery-grid{grid-template-columns:repeat(2,1fr);} .gallery-item.tall{grid-row:span 1; aspect-ratio:4/5;} }
+@media(max-width:560px){ .gallery-grid{grid-template-columns:1fr;} }
+
+/* ---------- Contact ---------- */
+.contact-wrap{display:grid; grid-template-columns:1.15fr 0.85fr; gap:40px;}
+.glass{
+  background:var(--glass-bg); border:1px solid var(--glass-border);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-radius:4px;
+}
+.contact-card{padding:44px;}
+.field{position:relative; margin-bottom:30px;}
+.field input, .field textarea{
+  width:100%; background:transparent; border:none; border-bottom:1px solid rgba(212,175,55,0.28);
+  color:var(--white); font-family:var(--font-body); font-size:15px; font-weight:300;
+  padding:10px 2px; outline:none; resize:none;
+  transition:border-color .35s var(--ease);
+}
+.field textarea{min-height:90px;}
+.field label{
+  position:absolute; left:2px; top:10px; color:var(--muted); font-size:14px;
+  pointer-events:none; transition:all .3s var(--ease); letter-spacing:0.02em;
+}
+.field input:focus, .field textarea:focus{border-color:var(--gold);}
+.field input:focus ~ label, .field input:not(:placeholder-shown) ~ label,
+.field textarea:focus ~ label, .field textarea:not(:placeholder-shown) ~ label{
+  top:-14px; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold);
+}
+.submit-btn{
+  margin-top:6px; padding:15px 38px; background:transparent; border:1px solid var(--gold);
+  color:var(--gold-pale); letter-spacing:0.16em; font-size:12px; text-transform:uppercase; cursor:pointer;
+  transition:background .4s var(--ease), color .4s var(--ease), box-shadow .4s var(--ease);
+}
+.submit-btn:hover{background:var(--gold); color:#0a0a0a; box-shadow:0 10px 40px -10px rgba(212,175,55,0.5);}
+.form-msg{margin-top:16px; font-size:13px; color:var(--gold-light); min-height:18px; opacity:0; transition:opacity .4s;}
+.form-msg.show{opacity:1;}
+
+.contact-social{display:flex; flex-direction:column; justify-content:space-between; padding:44px 8px;}
+.contact-line{font-family:var(--font-script); font-style:italic; font-size:22px; color:#d7d2c6; line-height:1.6; margin:0 0 30px;}
+.social-icons{display:flex; gap:16px; margin-bottom:36px;}
+.social-icons a{
+  width:44px; height:44px; border-radius:50%; border:1px solid rgba(212,175,55,0.35);
+  display:flex; align-items:center; justify-content:center; color:var(--gold-pale);
+  transition:background .35s var(--ease), color .35s var(--ease), transform .3s var(--ease);
+}
+.social-icons a:hover{background:var(--gold); color:#0a0a0a; transform:translateY(-3px);}
+.social-icons svg{width:17px;height:17px;}
+.contact-email{font-size:14px; letter-spacing:0.05em; color:var(--muted);}
+.contact-email a{color:var(--gold-light); border-bottom:1px solid rgba(212,175,55,0.3);}
+@media(max-width:820px){ .contact-wrap{grid-template-columns:1fr;} .contact-card{padding:30px;} .contact-social{padding:8px;} }
+
+.site-footer{
+  margin-top:110px; padding-top:26px; border-top:1px solid rgba(212,175,55,0.12);
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  font-size:11.5px; letter-spacing:0.08em; color:var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+}
+</style>
+</head>
+<body>
+
+<div id="preloader">
+  <div class="pre-mono">YOSIF&nbsp;NAMIQ</div>
+  <div class="pre-line"></div>
+</div>
+
+<nav id="site-nav">
+  <a href="#home" class="nav-logo">YN</a>
+  <div class="nav-links" id="nav-links">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#music">Music</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+
+<section id="home" class="hero">
+  <canvas id="piano-canvas"></canvas>
+  <div class="hero-vignette"></div>
+  <div class="hero-content">
+    <p class="hero-title">YOSIF NAMIQ<span class="amp">Composer · Pianist · Cinematic Music</span></p>
+    <p class="hero-hint">Drag to turn the piano</p>
+  </div>
+  <div class="scroll-cue"><span></span></div>
+</section>
+
+<section id="about" class="section about">
+  <div class="section-inner">
+    <p class="section-label">About</p>
+    <div style="display:grid; grid-template-columns:0.85fr 1.15fr; gap:70px; align-items:start;" class="about-grid">
+      <div class="about-figure"><canvas id="about-canvas"></canvas></div>
+      <div>
+        <h2 class="section-title">A voice carried from<br><em>the mountains to the score</em></h2>
+        <p class="about-text">Yosif Namiq is a composer and pianist from Kurdistan whose work moves between intimacy and grandeur. Rooted in the melodic language of his homeland and shaped by the emotional grammar of film scoring, his music turns memory and landscape into sound.</p>
+        <p class="about-text">Every piece begins the same way — alone, at the piano, with a single phrase allowed to grow until it is felt before it is understood. From that first phrase, orchestras rise, strings swell, and the cinematic takes shape.</p>
+        <p class="about-quote">"I don't write music to be heard. I write it to be remembered."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="music" class="section music">
+  <div class="section-inner">
+    <p class="section-label">Music</p>
+    <h2 class="section-title">Selected <em>Compositions</em></h2>
+    <div class="music-grid" id="music-grid"></div>
+  </div>
+</section>
+
+<section id="gallery" class="section gallery">
+  <div class="section-inner">
+    <p class="section-label">Gallery</p>
+    <h2 class="section-title">Moments &amp; <em>Movements</em></h2>
+    <div class="gallery-grid" id="gallery-grid"></div>
+  </div>
+</section>
+
+<section id="contact" class="section contact">
+  <div class="section-inner">
+    <p class="section-label">Contact</p>
+    <h2 class="section-title">Let's create something<br><em>unforgettable</em></h2>
+    <div class="contact-wrap">
+      <div class="contact-card glass">
+        <form id="contact-form">
+          <div class="field">
+            <input type="text" id="c-name" required placeholder=" ">
+            <label for="c-name">Your Name</label>
+          </div>
+          <div class="field">
+            <input type="email" id="c-email" required placeholder=" ">
+            <label for="c-email">Email Address</label>
+          </div>
+          <div class="field">
+            <textarea id="c-message" required placeholder=" "></textarea>
+            <label for="c-message">Tell me about your project</label>
+          </div>
+          <button type="submit" class="submit-btn">Send Message</button>
+          <p class="form-msg" id="form-msg">Thank you — your message has been sent. Yosif will be in touch soon.</p>
+        </form>
+      </div>
+      <div class="contact-social">
+        <div>
+          <p class="contact-line">For scoring, collaborations,<br>and performance inquiries.</p>
+          <div class="social-icons">
+            <a href="#" aria-label="Instagram" title="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></svg>
+            </a>
+            <a href="#" aria-label="YouTube" title="YouTube">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2.5" y="5.5" width="19" height="13" rx="3.5"/><path d="M10.5 9.5l5 2.5-5 2.5v-5z" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="#" aria-label="Spotify" title="Spotify">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9.2"/><path d="M7 10.2c3-1 7-.6 9.6.9M7.4 13.4c2.5-.8 5.7-.5 7.9.8M7.8 16.3c2-.6 4.4-.3 6 .6" stroke-linecap="round"/></svg>
+            </a>
+          </div>
+          <p class="contact-email">Write directly at <a href="mailto:hello@yosifnamiq.com">hello@yosifnamiq.com</a></p>
+        </div>
+      </div>
+    </div>
+    <footer class="site-footer">
+      <span>© 2026 Yosif Namiq. All rights reserved.</span>
+      <span>Composer &amp; Pianist — Kurdistan</span>
+    </footer>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script>
+(function(){
+"use strict";
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ============================================================
+   Utility: seeded random
+============================================================ */
+function mulberry32(seed){
+  return function(){
+    seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/* ============================================================
+   PRELOADER
+============================================================ */
+function runPreloader(){
+  if(typeof gsap === 'undefined'){
+    document.getElementById('preloader').style.display='none';
+    playHeroIntro();
+    return;
+  }
+  const tl = gsap.timeline({
+    onComplete:()=>{
+      const pre = document.getElementById('preloader');
+      pre.style.pointerEvents='none';
+      playHeroIntro();
+    }
+  });
+  tl.to('.pre-mono',{opacity:1,duration:0.9,ease:'power2.out'})
+    .to('.pre-line',{scaleX:1,duration:0.7,ease:'power2.inOut'},'-=0.35')
+    .to('#preloader',{opacity:0,duration:0.9,ease:'power2.inOut', delay:0.35})
+    .set('#preloader',{display:'none'});
+}
+
+function playHeroIntro(){
+  if(typeof gsap === 'undefined') return;
+  gsap.to('.hero-title', {opacity:1, y:0, duration:1.3, ease:'power3.out'});
+  gsap.fromTo('.hero-title', {y:36}, {y:0, duration:1.3, ease:'power3.out'});
+  gsap.to('.hero-hint', {opacity:1, duration:1, delay:1.0, ease:'power2.out'});
+  gsap.to('.scroll-cue', {opacity:1, duration:1, delay:1.2, ease:'power2.out'});
+}
+
+/* ============================================================
+   NAV
+============================================================ */
+const siteNav = document.getElementById('site-nav');
+window.addEventListener('scroll', ()=>{
+  siteNav.classList.toggle('scrolled', window.scrollY > 60);
+}, {passive:true});
+
+const navToggle = document.getElementById('nav-toggle');
+const navLinks = document.getElementById('nav-links');
+navToggle.addEventListener('click', ()=> navLinks.classList.toggle('open'));
+navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=> navLinks.classList.remove('open')));
+
+const navAnchors = navLinks.querySelectorAll('a');
+const sectionsForNav = ['home','about','music','gallery','contact'].map(id=>document.getElementById(id));
+function updateActiveNav(){
+  let current = sectionsForNav[0].id;
+  const y = window.scrollY + window.innerHeight*0.35;
+  sectionsForNav.forEach(sec=>{ if(sec.offsetTop <= y) current = sec.id; });
+  navAnchors.forEach(a=> a.classList.toggle('active', a.getAttribute('href') === '#'+current));
+}
+window.addEventListener('scroll', updateActiveNav, {passive:true});
+updateActiveNav();
+
+/* ============================================================
+   THREE.JS — HERO PIANO SCENE
+============================================================ */
+let heroScene = null;
+function initPianoScene(){
+  const heroSection = document.getElementById('home');
+  const canvas = document.getElementById('piano-canvas');
+  if(typeof THREE === 'undefined'){ heroSection.style.background = 'radial-gradient(circle at 50% 30%, #171410, #050505)'; return; }
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x050505);
+  scene.fog = new THREE.FogExp2(0x050505, 0.05);
+
+  const isMobile = window.innerWidth < 760;
+  const camera = new THREE.PerspectiveCamera(38, heroSection.clientWidth/window.innerHeight, 0.1, 60);
+  camera.position.set(0, 1.75, isMobile ? 6.4 : 4.9);
+  camera.lookAt(0, 0.85, -0.35);
+
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:false, powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+  renderer.setSize(heroSection.clientWidth, window.innerHeight);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  if('outputEncoding' in renderer) renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.15;
+
+  /* ---------- Lighting ---------- */
+  const hemi = new THREE.HemisphereLight(0x2b2013, 0x000000, 0.55);
+  scene.add(hemi);
+
+  const keyLight = new THREE.SpotLight(0xF4E0A8, 4.2, 16, Math.PI/6.2, 0.45, 1.4);
+  keyLight.position.set(2.6, 4.2, 2.4);
+  keyLight.target.position.set(0, 0.6, -0.8);
+  keyLight.castShadow = true;
+  keyLight.shadow.mapSize.set(isMobile ? 512 : 1024, isMobile ? 512 : 1024);
+  keyLight.shadow.bias = -0.0015;
+  scene.add(keyLight, keyLight.target);
+
+  const rimLight = new THREE.PointLight(0x8B6F2E, 1.6, 11);
+  rimLight.position.set(-2.4, 1.8, -3.2);
+  scene.add(rimLight);
+
+  const fillLight = new THREE.PointLight(0x2a2c44, 0.5, 9);
+  fillLight.position.set(-1.8, 1.1, 2.3);
+  scene.add(fillLight);
+
+  const keyGlow = new THREE.PointLight(0xD4AF37, 0.7, 3.4);
+  keyGlow.position.set(0, 0.95, 0.55);
+  scene.add(keyGlow);
+
+  /* ---------- Floor ---------- */
+  const floorGeo = new THREE.CircleGeometry(8, 64);
+  const floorMat = new THREE.MeshStandardMaterial({color:0x030303, metalness:0.35, roughness:0.55});
+  const floor = new THREE.Mesh(floorGeo, floorMat);
+  floor.rotation.x = -Math.PI/2;
+  floor.receiveShadow = true;
+  scene.add(floor);
+
+  /* ---------- Piano geometry ---------- */
+  function buildKeys(group, keybedTopY, frontZ){
+    const totalWhite = 36;
+    const whiteW = 0.034, whiteGap = 0.001, whiteDepth = 0.155, whiteH = 0.018;
+    const spacing = 1.28/(totalWhite-1);
+    const startX = -0.64;
+
+    const whiteGeo = new THREE.BoxGeometry(whiteW - whiteGap, whiteH, whiteDepth);
+    const whiteMat = new THREE.MeshStandardMaterial({color:0xF2ECDD, roughness:0.4, metalness:0.04});
+    const whiteMesh = new THREE.InstancedMesh(whiteGeo, whiteMat, totalWhite);
+    whiteMesh.castShadow = true; whiteMesh.receiveShadow = true;
+    const dummy = new THREE.Object3D();
+    for(let i=0;i<totalWhite;i++){
+      dummy.position.set(startX + i*spacing, keybedTopY + whiteH/2, frontZ + whiteDepth/2);
+      dummy.rotation.set(0,0,0);
+      dummy.updateMatrix();
+      whiteMesh.setMatrixAt(i, dummy.matrix);
+    }
+    group.add(whiteMesh);
+
+    const blackIdx = [];
+    const octaves = Math.floor(totalWhite/7);
+    for(let o=0;o<octaves;o++){
+      [0,1,3,4,5].forEach(k=>{
+        const idx = o*7 + k;
+        if(idx < totalWhite - 1) blackIdx.push(idx + 0.5);
+      });
+    }
+    const blackGeo = new THREE.BoxGeometry(whiteW*0.62, whiteH*1.5, whiteDepth*0.58);
+    const blackMat = new THREE.MeshStandardMaterial({color:0x080808, roughness:0.25, metalness:0.15});
+    const blackMesh = new THREE.InstancedMesh(blackGeo, blackMat, blackIdx.length);
+    blackMesh.castShadow = true;
+    blackIdx.forEach((pos,i)=>{
+      dummy.position.set(startX + pos*spacing, keybedTopY + whiteH*1.15, frontZ + whiteDepth*0.26);
+      dummy.updateMatrix();
+      blackMesh.setMatrixAt(i, dummy.matrix);
+    });
+    group.add(blackMesh);
+  }
+
+  function buildPiano(){
+    const group = new THREE.Group();
+    const legHeight = 0.8;
+
+    const shape = new THREE.Shape();
+    shape.moveTo(-0.70, 0);
+    shape.lineTo(0.70, 0);
+    shape.bezierCurveTo(1.05, 0.5, 1.15, 1.1, 1.0, 1.6);
+    shape.bezierCurveTo(0.9, 2.0, 0.85, 2.3, 0.6, 2.6);
+    shape.bezierCurveTo(0.4, 2.85, 0.25, 2.95, 0.05, 3.0);
+    shape.bezierCurveTo(-0.2, 2.95, -0.55, 2.7, -0.65, 2.3);
+    shape.bezierCurveTo(-0.75, 1.6, -0.75, 0.8, -0.70, 0);
+    shape.closePath();
+
+    const bodyGeo = new THREE.ExtrudeGeometry(shape, {depth:0.4, bevelEnabled:true, bevelThickness:0.015, bevelSize:0.015, bevelSegments:2, curveSegments:26});
+    bodyGeo.rotateX(-Math.PI/2);
+    const bodyMat = new THREE.MeshPhysicalMaterial({color:0x050505, metalness:0.6, roughness:0.14, clearcoat:1, clearcoatRoughness:0.08, envMapIntensity:1.2});
+    const body = new THREE.Mesh(bodyGeo, bodyMat);
+    body.castShadow = true; body.receiveShadow = true;
+    group.add(body);
+
+    const edgeMat = new THREE.LineBasicMaterial({color:0xD4AF37, transparent:true, opacity:0.3});
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(bodyGeo, 20), edgeMat);
+    group.add(edges);
+
+    // Lid
+    const lidGeo = new THREE.ExtrudeGeometry(shape, {depth:0.028, bevelEnabled:true, bevelThickness:0.007, bevelSize:0.007, bevelSegments:1, curveSegments:26});
+    lidGeo.rotateX(-Math.PI/2);
+    const lidMat = new THREE.MeshPhysicalMaterial({color:0x070707, metalness:0.6, roughness:0.12, clearcoat:1, clearcoatRoughness:0.06});
+    const lidMesh = new THREE.Mesh(lidGeo, lidMat);
+    lidMesh.castShadow = true;
+    lidMesh.position.set(0.70, 0, 0);
+    const lidPivot = new THREE.Group();
+    lidPivot.position.set(-0.70, 0.4, 0);
+    lidPivot.add(lidMesh);
+    lidPivot.rotation.z = 0.52;
+    group.add(lidPivot);
+    const lidEdge = new THREE.LineSegments(new THREE.EdgesGeometry(lidGeo, 20), edgeMat.clone());
+    lidMesh.add(lidEdge);
+
+    // Music stand
+    const standGeo = new THREE.BoxGeometry(0.85, 0.32, 0.018);
+    const standMat = new THREE.MeshStandardMaterial({color:0x060606, metalness:0.55, roughness:0.3});
+    const stand = new THREE.Mesh(standGeo, standMat);
+    stand.position.set(0.02, 0.56, 0.14);
+    stand.rotation.x = -0.4;
+    stand.castShadow = true;
+    group.add(stand);
+    const standFrame = new THREE.LineSegments(new THREE.EdgesGeometry(standGeo), new THREE.LineBasicMaterial({color:0xD4AF37, transparent:true, opacity:0.7}));
+    standFrame.position.copy(stand.position);
+    standFrame.rotation.copy(stand.rotation);
+    group.add(standFrame);
+
+    // Keys
+    buildKeys(group, 0.4, 0.015);
+
+    // Gold accent strip along keybed front
+    const stripGeo = new THREE.BoxGeometry(1.34, 0.014, 0.02);
+    const stripMat = new THREE.MeshStandardMaterial({color:0xD4AF37, metalness:1, roughness:0.28});
+    const strip = new THREE.Mesh(stripGeo, stripMat);
+    strip.position.set(0, 0.398, 0.005);
+    group.add(strip);
+
+    // Legs
+    const legMat = new THREE.MeshStandardMaterial({color:0x070707, metalness:0.55, roughness:0.22});
+    const ringMat = new THREE.MeshStandardMaterial({color:0xD4AF37, metalness:1, roughness:0.3});
+    const legPositions = [[-0.55,-0.06],[0.55,-0.06],[0.12,-2.55]];
+    legPositions.forEach(([lx,lz])=>{
+      const legGeo = new THREE.CylinderGeometry(0.045, 0.06, legHeight, 14);
+      const leg = new THREE.Mesh(legGeo, legMat);
+      leg.position.set(lx, -legHeight/2, lz);
+      leg.castShadow = true;
+      group.add(leg);
+      const ringGeo = new THREE.TorusGeometry(0.055, 0.006, 8, 20);
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.position.set(lx, -legHeight + 0.09, lz);
+      ring.rotation.x = Math.PI/2;
+      group.add(ring);
+    });
+
+    // Pedals + lyre
+    const lyreGeo = new THREE.BoxGeometry(0.02, 0.5, 0.14);
+    const lyre = new THREE.Mesh(lyreGeo, legMat);
+    lyre.position.set(0, -0.42, 0.2);
+    group.add(lyre);
+    const pedalGeo = new THREE.CylinderGeometry(0.022, 0.026, 0.05, 12);
+    [-0.09, 0, 0.09].forEach((px,i)=>{
+      const pedal = new THREE.Mesh(pedalGeo, ringMat);
+      pedal.position.set(px, -0.66, 0.22 + (i===1?0.02:0));
+      pedal.castShadow = true;
+      group.add(pedal);
+    });
+
+    group.position.y = legHeight;
+    return group;
+  }
+
+  const pianoGroup = buildPiano();
+  pianoGroup.rotation.y = 0.42;
+  scene.add(pianoGroup);
+
+  // Faint mirrored reflection
+  const reflection = pianoGroup.clone(true);
+  reflection.scale.y = -1;
+  reflection.position.y = -0.001;
+  reflection.traverse(obj=>{
+    if(obj.isMesh){
+      obj.castShadow = false; obj.receiveShadow = false;
+      obj.material = obj.material.clone();
+      obj.material.transparent = true;
+      obj.material.opacity = 0.14;
+    }
+    if(obj.isInstancedMesh){
+      obj.material = obj.material.clone();
+      obj.material.transparent = true;
+      obj.material.opacity = 0.12;
+    }
+  });
+  scene.add(reflection);
+
+  function makeFadeTexture(){
+    const size = 512;
+    const c = document.createElement('canvas'); c.width = c.height = size;
+    const ctx = c.getContext('2d');
+    const grad = ctx.createRadialGradient(size/2,size/2,0,size/2,size/2,size/2);
+    grad.addColorStop(0,'rgba(3,3,3,0)');
+    grad.addColorStop(0.45,'rgba(3,3,3,0.35)');
+    grad.addColorStop(1,'rgba(3,3,3,1)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0,0,size,size);
+    return new THREE.CanvasTexture(c);
+  }
+  const fadeMat = new THREE.MeshBasicMaterial({map:makeFadeTexture(), transparent:true});
+  const fadePlane = new THREE.Mesh(new THREE.PlaneGeometry(7,7), fadeMat);
+  fadePlane.rotation.x = -Math.PI/2;
+  fadePlane.position.y = 0.001;
+  scene.add(fadePlane);
+
+  /* ---------- Particles ---------- */
+  const particleCount = isMobile ? 130 : 320;
+  const positions = new Float32Array(particleCount*3);
+  const baseX = new Float32Array(particleCount);
+  const baseZ = new Float32Array(particleCount);
+  const speeds = new Float32Array(particleCount);
+  const seedRand = mulberry32(1337);
+  for(let i=0;i<particleCount;i++){
+    const x = (seedRand()-0.5)*6.5;
+    const y = seedRand()*4.2;
+    const z = (seedRand()-0.5)*6 - 0.5;
+    positions[i*3] = x; positions[i*3+1] = y; positions[i*3+2] = z;
+    baseX[i] = x; baseZ[i] = z;
+    speeds[i] = 0.05 + seedRand()*0.09;
+  }
+  const particleGeo = new THREE.BufferGeometry();
+  particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  const particleMat = new THREE.PointsMaterial({
+    color:0xE8CD86, size:0.017, transparent:true, opacity:0.55,
+    blending:THREE.AdditiveBlending, depthWrite:false, sizeAttenuation:true
+  });
+  const particles = new THREE.Points(particleGeo, particleMat);
+  scene.add(particles);
+
+  /* ---------- Interaction: drag to rotate ---------- */
+  let dragging = false, prevX = 0, prevY = 0;
+  let targetRotY = pianoGroup.rotation.y, currentRotY = pianoGroup.rotation.y;
+  let targetRotX = 0.05, currentRotX = 0.05;
+  let autoRotate = true, idleTimer = null;
+
+  function onDown(e){
+    dragging = true; autoRotate = false;
+    const p = e.touches ? e.touches[0] : e;
+    prevX = p.clientX; prevY = p.clientY;
+    clearTimeout(idleTimer);
+  }
+  function onMove(e){
+    if(!dragging) return;
+    const p = e.touches ? e.touches[0] : e;
+    const dx = p.clientX - prevX, dy = p.clientY - prevY;
+    targetRotY += dx*0.008;
+    targetRotX += dy*0.004;
+    targetRotX = Math.max(-0.15, Math.min(0.35, targetRotX));
+    prevX = p.clientX; prevY = p.clientY;
+  }
+  function onUp(){
+    dragging = false;
+    idleTimer = setTimeout(()=>{ autoRotate = true; }, 2600);
+  }
+  canvas.addEventListener('mousedown', onDown);
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp);
+  canvas.addEventListener('touchstart', onDown, {passive:true});
+  canvas.addEventListener('touchmove', onMove, {passive:true});
+  canvas.addEventListener('touchend', onUp);
+
+  /* ---------- Visibility pause ---------- */
+  let heroVisible = true;
+  if('IntersectionObserver' in window){
+    new IntersectionObserver((entries)=>{ heroVisible = entries[0].isIntersecting; }, {threshold:0}).observe(heroSection);
+  }
+
+  /* ---------- Resize ---------- */
+  function onResize(){
+    const w = heroSection.clientWidth, h = window.innerHeight;
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  }
+  let resizeT;
+  window.addEventListener('resize', ()=>{ clearTimeout(resizeT); resizeT = setTimeout(onResize, 120); });
+
+  /* ---------- Animate ---------- */
+  const clock = new THREE.Clock();
+  function animate(){
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+
+    if(!reduceMotion){
+      if(autoRotate) targetRotY += 0.0011;
+      currentRotY += (targetRotY - currentRotY) * 0.07;
+      currentRotX += (targetRotX - currentRotX) * 0.07;
+      pianoGroup.rotation.y = currentRotY;
+      pianoGroup.rotation.x = currentRotX;
+      reflection.rotation.y = currentRotY;
+
+      const posAttr = particleGeo.attributes.position;
+      for(let i=0;i<particleCount;i++){
+        let y = posAttr.array[i*3+1] + speeds[i]*0.016;
+        if(y > 4.2) y = 0;
+        posAttr.array[i*3+1] = y;
+        posAttr.array[i*3] = baseX[i] + Math.sin(t*0.25 + i)*0.12;
+        posAttr.array[i*3+2] = baseZ[i] + Math.cos(t*0.2 + i)*0.12;
+      }
+      posAttr.needsUpdate = true;
+      keyGlow.intensity = 0.6 + Math.sin(t*1.6)*0.08;
+    } else {
+      pianoGroup.rotation.y = currentRotY;
+      pianoGroup.rotation.x = currentRotX;
+      reflection.rotation.y = currentRotY;
+    }
+
+    if(heroVisible) renderer.render(scene, camera);
+  }
+  animate();
+
+  heroScene = {scene, camera, renderer};
+}
+
+/* ============================================================
+   GENERATIVE ART (album covers / gallery / about portrait)
+============================================================ */
+function paintArt(canvas, opts){
+  const dpr = Math.min(window.devicePixelRatio||1, 2);
+  const rect = canvas.getBoundingClientRect();
+  const w = Math.max(1, Math.round((rect.width || opts.w || 300) * dpr));
+  const h = Math.max(1, Math.round((rect.height || opts.h || 300) * dpr));
+  canvas.width = w; canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  const rnd = mulberry32(opts.seed || 1);
+
+  // base
+  const bgGrad = ctx.createLinearGradient(0,0,w,h);
+  bgGrad.addColorStop(0, '#0d0c0a');
+  bgGrad.addColorStop(1, '#020202');
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0,0,w,h);
+
+  const goldStops = ['#8B6F2E','#D4AF37','#F0DFA0','#5c4a20'];
+
+  function goldGlow(x,y,r,alpha){
+    const g = ctx.createRadialGradient(x,y,0,x,y,r);
+    g.addColorStop(0, `rgba(212,175,55,${alpha})`);
+    g.addColorStop(1, 'rgba(212,175,55,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+  }
+
+  if(opts.type === 'orbits'){
+    goldGlow(w*0.5, h*0.35, w*0.6, 0.35);
+    for(let i=0;i<5;i++){
+      ctx.strokeStyle = `rgba(212,175,55,${0.15+rnd()*0.25})`;
+      ctx.lineWidth = 1 + rnd()*1.5;
+      ctx.beginPath();
+      ctx.ellipse(w*0.5, h*0.55, w*(0.2+i*0.13), h*(0.12+i*0.09), rnd()*0.6-0.3, 0, Math.PI*2);
+      ctx.stroke();
+    }
+  } else if(opts.type === 'keys'){
+    goldGlow(w*0.3,h*0.2,w*0.5,0.28);
+    const n = 9;
+    for(let i=0;i<n;i++){
+      const x = (w/n)*i;
+      ctx.fillStyle = i%2===0 ? 'rgba(240,225,190,0.9)' : 'rgba(8,8,8,0.9)';
+      ctx.fillRect(x, h*0.15, w/n - 2, h*0.85);
+      ctx.strokeStyle = 'rgba(212,175,55,0.15)';
+      ctx.strokeRect(x, h*0.15, w/n - 2, h*0.85);
+    }
+    ctx.fillStyle = 'rgba(5,5,5,0.55)';
+    ctx.fillRect(0,0,w,h*0.18);
+  } else if(opts.type === 'bokeh'){
+    goldGlow(w*0.5,h*0.5,w*0.7,0.2);
+    for(let i=0;i<22;i++){
+      const x = rnd()*w, y = rnd()*h, r = 6+rnd()*40*dpr;
+      goldGlow(x,y,r, 0.08+rnd()*0.2);
+    }
+  } else if(opts.type === 'arches'){
+    goldGlow(w*0.5,h*0.15,w*0.5,0.25);
+    for(let i=0;i<6;i++){
+      ctx.strokeStyle = `rgba(212,175,55,${0.12+rnd()*0.2})`;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      const rx = w*(0.15+i*0.12), ry = h*(0.5+i*0.09);
+      ctx.arc(w*0.5, h*0.9, rx, Math.PI, Math.PI*2);
+      ctx.stroke();
+    }
+  } else if(opts.type === 'streaks'){
+    goldGlow(w*0.7,h*0.3,w*0.6,0.22);
+    for(let i=0;i<14;i++){
+      ctx.strokeStyle = `rgba(212,175,55,${0.08+rnd()*0.18})`;
+      ctx.lineWidth = 1+rnd()*2;
+      ctx.beginPath();
+      const x0 = rnd()*w, y0 = rnd()*h*0.3;
+      ctx.moveTo(x0,y0);
+      ctx.lineTo(x0 - w*0.3 - rnd()*w*0.3, y0 + h*0.9);
+      ctx.stroke();
+    }
+  } else { // particles
+    goldGlow(w*0.4,h*0.6,w*0.55,0.22);
+    for(let i=0;i<70;i++){
+      const x = rnd()*w, y = rnd()*h;
+      const r = 0.6+rnd()*2.2*dpr;
+      ctx.fillStyle = `rgba(240,223,160,${0.2+rnd()*0.55})`;
+      ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+    }
+  }
+
+  // vignette
+  const vg = ctx.createRadialGradient(w/2,h/2,Math.min(w,h)*0.2,w/2,h/2,Math.max(w,h)*0.75);
+  vg.addColorStop(0,'rgba(0,0,0,0)');
+  vg.addColorStop(1,'rgba(0,0,0,0.55)');
+  ctx.fillStyle = vg;
+  ctx.fillRect(0,0,w,h);
+
+  // fine grain line accents
+  ctx.strokeStyle = 'rgba(212,175,55,0.12)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(1,1,w-2,h-2);
+}
+
+/* ============================================================
+   MUSIC DATA + RENDER
+============================================================ */
+const TRACKS = [
+  {title:'Kurdistan Skies', sub:'Orchestral · 4:32', art:'orbits', freqs:[196.00,246.94,293.66]},
+  {title:'Requiem for Dawn', sub:'Piano & Strings · 3:58', art:'bokeh', freqs:[220.00,277.18,329.63]},
+  {title:'Echoes of Erbil', sub:'Cinematic · 5:10', art:'arches', freqs:[174.61,220.00,261.63]},
+  {title:'Winter\u2019s Hymn', sub:'Solo Piano · 3:21', art:'streaks', freqs:[246.94,311.13,369.99]},
+];
+
+function renderMusic(){
+  const grid = document.getElementById('music-grid');
+  TRACKS.forEach((t, i)=>{
+    const card = document.createElement('div');
+    card.className = 'music-card';
+    card.innerHTML = `
+      <div class="cover-wrap"><canvas></canvas></div>
+      <div class="track-info">
+        <h3 class="track-title">${t.title}</h3>
+        <p class="track-sub">${t.sub}</p>
+        <div class="play-row">
+          <button class="play-btn" aria-label="Play ${t.title}">
+            <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+          </button>
+          <div class="eq"><span></span><span></span><span></span><span></span></div>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+    const cv = card.querySelector('canvas');
+    paintArt(cv, {type:t.art, seed: i*37+11, w:220,h:220});
+
+    const btn = card.querySelector('.play-btn');
+    btn.addEventListener('click', ()=> toggleTrack(t, btn, card));
+
+    // 3D tilt
+    card.addEventListener('mousemove', (e)=>{
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX - r.left)/r.width - 0.5;
+      const py = (e.clientY - r.top)/r.height - 0.5;
+      if(typeof gsap !== 'undefined' && !reduceMotion){
+        gsap.to(card, {rotateX: py*-6, rotateY: px*8, duration:0.5, ease:'power2.out', transformPerspective:800});
+      }
+    });
+    card.addEventListener('mouseleave', ()=>{
+      if(typeof gsap !== 'undefined'){
+        gsap.to(card, {rotateX:0, rotateY:0, duration:0.6, ease:'power3.out'});
+      }
+    });
+  });
+}
+
+let audioCtx = null, currentAudio = null;
+function ensureCtx(){
+  if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+function stopCurrent(){
+  if(!currentAudio) return;
+  const {oscs, master, btn, card} = currentAudio;
+  const now = audioCtx.currentTime;
+  master.gain.cancelScheduledValues(now);
+  master.gain.setValueAtTime(master.gain.value, now);
+  master.gain.linearRampToValueAtTime(0, now + 0.5);
+  oscs.forEach(o=>{ try{ o.stop(now+0.55); }catch(e){} });
+  btn.classList.remove('playing');
+  card.classList.remove('active-eq');
+  currentAudio = null;
+}
+function toggleTrack(t, btn, card){
+  const ctx = ensureCtx();
+  const wasThis = currentAudio && currentAudio.btn === btn;
+  stopCurrent();
+  if(wasThis) return;
+  const now = ctx.currentTime;
+  const master = ctx.createGain();
+  master.gain.setValueAtTime(0, now);
+  master.gain.linearRampToValueAtTime(0.1, now + 1.4);
+  master.connect(ctx.destination);
+  const oscs = t.freqs.map((f, idx)=>{
+    const o = ctx.createOscillator();
+    o.type = idx===0 ? 'sine' : 'triangle';
+    o.frequency.value = f;
+    const g = ctx.createGain();
+    g.gain.value = 1/t.freqs.length;
+    o.connect(g); g.connect(master);
+    o.start();
+    return o;
+  });
+  currentAudio = {oscs, master, btn, card};
+  btn.classList.add('playing');
+  card.classList.add('active-eq');
+}
+
+/* ============================================================
+   GALLERY
+============================================================ */
+const GALLERY_ITEMS = [
+  {label:'Orchestra, Full Score', art:'orbits', seed:5, tall:true},
+  {label:'Ivory & Light', art:'keys', seed:12},
+  {label:'Nocturne', art:'particles', seed:19},
+  {label:'Concert Hall', art:'arches', seed:26},
+  {label:'Golden Hour Session', art:'bokeh', seed:33, tall:true},
+  {label:'Hands, First Take', art:'streaks', seed:41},
+];
+function renderGallery(){
+  const grid = document.getElementById('gallery-grid');
+  GALLERY_ITEMS.forEach((g,i)=>{
+    const item = document.createElement('div');
+    item.className = 'gallery-item' + (g.tall ? ' tall' : '');
+    item.innerHTML = `<canvas></canvas><div class="g-overlay"><span class="g-cap">${g.label}</span></div>`;
+    grid.appendChild(item);
+    paintArt(item.querySelector('canvas'), {type:g.art, seed:g.seed, w:400, h:500});
+
+    item.addEventListener('mousemove', (e)=>{
+      const r = item.getBoundingClientRect();
+      const px = (e.clientX - r.left)/r.width - 0.5;
+      const py = (e.clientY - r.top)/r.height - 0.5;
+      const cv = item.querySelector('canvas');
+      if(!reduceMotion) cv.style.transform = `scale(1.06) rotateX(${py*-6}deg) rotateY(${px*8}deg)`;
+    });
+    item.addEventListener('mouseleave', ()=>{
+      item.querySelector('canvas').style.transform = 'scale(1) rotateX(0) rotateY(0)';
+    });
+  });
+}
+
+/* ============================================================
+   ABOUT PORTRAIT CANVAS
+============================================================ */
+function renderAboutArt(){
+  const cv = document.getElementById('about-canvas');
+  paintArt(cv, {type:'keys', seed:7, w:520, h:640});
+}
+
+/* ============================================================
+   SCROLL ANIMATIONS
+============================================================ */
+function initScrollAnims(){
+  if(typeof gsap === 'undefined') return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll('.section-label, .section-title, .about-text, .about-quote').forEach(el=>{
+    gsap.fromTo(el, {opacity:0, y:28}, {
+      opacity:1, y:0, duration:1, ease:'power2.out',
+      scrollTrigger:{trigger:el, start:'top 88%'}
+    });
+  });
+
+  gsap.fromTo('.about-figure', {opacity:0, y:36}, {
+    opacity:1, y:0, duration:1.1, ease:'power2.out',
+    scrollTrigger:{trigger:'.about-figure', start:'top 85%'}
+  });
+
+  gsap.utils.toArray('.music-card').forEach((card, i)=>{
+    gsap.fromTo(card, {opacity:0, y:46}, {
+      opacity:1, y:0, duration:0.9, delay:(i%2)*0.08, ease:'power2.out',
+      scrollTrigger:{trigger:card, start:'top 92%'}
+    });
+  });
+
+  gsap.utils.toArray('.gallery-item').forEach((item, i)=>{
+    gsap.fromTo(item, {opacity:0, y:50}, {
+      opacity:1, y:0, duration:0.9, delay:(i%3)*0.07, ease:'power2.out',
+      scrollTrigger:{trigger:item, start:'top 92%'}
+    });
+  });
+
+  gsap.fromTo('.contact-card', {opacity:0, y:30}, {
+    opacity:1, y:0, duration:1, ease:'power2.out',
+    scrollTrigger:{trigger:'.contact-card', start:'top 88%'}
+  });
+  gsap.fromTo('.contact-social', {opacity:0, y:30}, {
+    opacity:1, y:0, duration:1, delay:0.1, ease:'power2.out',
+    scrollTrigger:{trigger:'.contact-social', start:'top 88%'}
+  });
+}
+
+/* ============================================================
+   CONTACT FORM
+============================================================ */
+function initContactForm(){
+  const form = document.getElementById('contact-form');
+  const msg = document.getElementById('form-msg');
+  form.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    msg.classList.add('show');
+    form.querySelector('.submit-btn').textContent = 'Sent';
+    setTimeout(()=>{
+      form.reset();
+      msg.classList.remove('show');
+      form.querySelector('.submit-btn').textContent = 'Send Message';
+    }, 3200);
+  });
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+document.addEventListener('DOMContentLoaded', ()=>{
+  renderMusic();
+  renderGallery();
+  renderAboutArt();
+  initContactForm();
+  initPianoScene();
+  initScrollAnims();
+  runPreloader();
+});
+})();
+</script>
+</body>
+</html>
